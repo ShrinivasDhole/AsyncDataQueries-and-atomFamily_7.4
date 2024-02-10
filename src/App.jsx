@@ -1,34 +1,45 @@
 
 import { RecoilRoot, useRecoilValue } from 'recoil'
 import './App.css'
-import { jobs, messagingAtom, networkAtom, notificationsAtom, totalNotificationSelector } from './atoms'
+import { notifications, todoAtomFamily,  totalNotificationSelector} from './atoms'
 
 function App() {
   return <RecoilRoot>
     <MainApp/>
+    <Todos id={1}></Todos>
+    <Todos id={2}></Todos>
   </RecoilRoot>
   
 }
 
 function MainApp(){
-  const netCount = useRecoilValue(networkAtom)
-  const jobsCount = useRecoilValue(jobs)
-  const notifCount = useRecoilValue(notificationsAtom)
-  const msgCount = useRecoilValue(messagingAtom)
-  const totalNotificationCount = useRecoilValue(totalNotificationSelector);
 
+  const notiCount = useRecoilValue(notifications); 
+  const totalNotification = useRecoilValue(totalNotificationSelector)
+
+  
   return (
     <div>
      <button>Home</button>
 
-     <button>My network ({netCount > 100 ? "99+" : netCount})</button>
-     <button>Jobs ({jobsCount})</button>
-     <button>Messaging ({notifCount})</button>
-     <button>Notifications ({msgCount})</button>
+     <button>My network ({notiCount.network > 100 ? "99+" : notiCount.network})</button>
+     <button>Jobs ({notiCount.jobs})</button>
+     <button>Messaging ({notiCount.messaging})</button>
+     <button>Notifications ({notiCount.notifications})</button>
 
-     <button>Me ({totalNotificationCount})</button>
+     <button>Me ({totalNotification})</button>
+
+     
     </div>
   )
+}
+
+function Todos({id}){
+  const displayTodos = useRecoilValue(todoAtomFamily(id));
+  return <div>
+    <p>{displayTodos.title}</p>
+    <p>{displayTodos.description}</p>
+  </div>
 }
 
 export default App
